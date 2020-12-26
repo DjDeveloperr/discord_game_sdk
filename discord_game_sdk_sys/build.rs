@@ -10,11 +10,12 @@ fn main() {
     println!("cargo:rerun-if-env-changed=DISCORD_GAME_SDK_PATH");
     println!("cargo:rerun-if-changed={}", sdk_path.display());
 
+    let mut libpath = "c/discord_game_sdk.h";
+    if cfg!(windows) {
+        libpath = "c\\discord_game_sdk.h";
+    }
+    
     generate_ffi_bindings(
-        let mut libpath = "c/discord_game_sdk.h";
-        if cfg!(windows) {
-            libpath = "c\\discord_game_sdk.h";
-        }
         bindgen::builder().header(sdk_path.join(libpath).to_str().unwrap()),
     );
 
