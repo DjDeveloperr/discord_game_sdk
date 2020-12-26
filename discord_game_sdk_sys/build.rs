@@ -11,7 +11,11 @@ fn main() {
     println!("cargo:rerun-if-changed={}", sdk_path.display());
 
     generate_ffi_bindings(
-        bindgen::builder().header(sdk_path.join("c/discord_game_sdk.h").to_str().unwrap()),
+        let mut libpath = "c/discord_game_sdk.h";
+        if cfg!(windows) {
+            libpath = "c\\discord_game_sdk.h";
+        }
+        bindgen::builder().header(sdk_path.join(libpath).to_str().unwrap()),
     );
 
     if cfg!(feature = "link") {
